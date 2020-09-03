@@ -14,28 +14,20 @@
  * limitations under the License.
  */
 
-import styled from 'styled-components';
-import { isMicrofrontend } from 'App';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import SingleSpaReact from 'single-spa-react';
+import { setPublicPath } from 'systemjs-webpack-interop';
+import App from './App';
 
-const Main = styled.main<{ isSidebarExpanded: boolean }>`
-  display: grid;
-  grid-template-areas:
-    'nav content'
-    'footer footer';
-  grid-template-rows: ${isMicrofrontend()
-    ? 'calc(100vh - 83px)'
-    : 'calc(100vh - 35px)'};
-  transition: all 0.2s;
-  grid-template-columns: ${({ isSidebarExpanded }) =>
-    isSidebarExpanded ? '140px' : '60px'};
-`;
+setPublicPath('@devcraft/charlescd');
 
-const Content = styled.section`
-  grid-area: content;
-  background-color: ${({ theme }) => theme.main.background};
-`;
+const lifeCycle = SingleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: App
+});
 
-export default {
-  Main,
-  Content
-};
+export const bootstrap = lifeCycle.bootstrap;
+export const mount = lifeCycle.mount;
+export const unmount = lifeCycle.unmount;
